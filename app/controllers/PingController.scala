@@ -7,7 +7,8 @@ import play.api.mvc._
 class PingController @Inject()(cc: ControllerComponents)
     extends AbstractController(cc) {
 
-  def ping() = Action { implicit request: Request[AnyContent] =>
-    NoContent
+  def ping(): Action[AnyContent] = Action {
+    implicit request: Request[AnyContent] =>
+      NoContent
   }
 }

@@ -20,3 +20,7 @@ libraryDependencies += "com.github.tomakehurst" % "wiremock" % "1.33" % Test
 // play.sbt.routes.RoutesKeys.routesImport += "com.example.binders._"
 
 scalafmtOnCompile := true
+
+(compile in Compile) := {
+  (compile in Compile) dependsOn (scalastyle in Compile).toTask("")
+}.value

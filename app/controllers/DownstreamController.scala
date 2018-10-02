@@ -9,13 +9,14 @@ class DownstreamController @Inject()(wsClient: WSClient,
                                      cc: ControllerComponents)
     extends AbstractController(cc) {
 
-  def downstream() = Action.async { implicit request: Request[AnyContent] =>
-    wsClient
-      .url("http://localhost:9000/downstream")
-      .get()
-      .map(_.body)
-      .map(_.toUpperCase)
-      .map(Ok(_))
+  def downstream(): Action[AnyContent] = Action.async {
+    implicit request: Request[AnyContent] =>
+      wsClient
+        .url("http://localhost:9000/downstream")
+        .get()
+        .map(_.body)
+        .map(_.toUpperCase)
+        .map(Ok(_))
 
   }
 }
