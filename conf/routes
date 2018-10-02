@@ -1,1 +1,2 @@
 GET     /ping                           controllers.PingController.ping
+GET     /downstream                           controllers.DownstreamController.downstream

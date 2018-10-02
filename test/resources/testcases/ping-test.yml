@@ -1,0 +1,3 @@
+description: "Ping should pong"
+executor: !!executors.PingRestCallExecutor {}
+validator: !!validators.NoContentRestCallResponseValidator {}

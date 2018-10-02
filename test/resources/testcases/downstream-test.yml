@@ -1,0 +1,8 @@
+description: "Downstream should upper case the result from the downstream service"
+mocks:
+  - !!mocks.DownstreamMock
+    responseBody: "bar"
+executor: !!executors.DownstreamRestCallExecutor {}
+validator: !!validators.DownstreamRestCallResponseValidator
+  expectedStatusCode: 200
+  expectedBody: "BAR"
