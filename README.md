@@ -1,0 +1,1 @@
+# play-testframework-pure-scala
