@@ -1,0 +1,1 @@
+GET     /ping                           controllers.PingController.ping
