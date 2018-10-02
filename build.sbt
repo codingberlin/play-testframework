@@ -18,3 +18,5 @@ libraryDependencies += "com.github.tomakehurst" % "wiremock" % "1.33" % Test
 
 // Adds additional packages into conf/routes
 // play.sbt.routes.RoutesKeys.routesImport += "com.example.binders._"
+
+scalafmtOnCompile := true

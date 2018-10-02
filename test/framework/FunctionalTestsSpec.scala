@@ -17,10 +17,15 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.io.Source
 
-class FunctionalTestsSpec extends PlaySpec with GuiceOneServerPerSuite with Injecting with BeforeAndAfterEach {
+class FunctionalTestsSpec
+    extends PlaySpec
+    with GuiceOneServerPerSuite
+    with Injecting
+    with BeforeAndAfterEach {
 
   private val wiremockPort = 9000
-  private val wireMockServer = new WireMockServer(wireMockConfig().port(wiremockPort))
+  private val wireMockServer = new WireMockServer(
+    wireMockConfig().port(wiremockPort))
 
   override def beforeEach {
     wireMockServer.start()
@@ -32,14 +37,18 @@ class FunctionalTestsSpec extends PlaySpec with GuiceOneServerPerSuite with Inje
   }
 
   val yaml = new Yaml(new Constructor(classOf[TestCase]))
-      val path = getClass.getResource("/testcases")
-      new File(path.getPath).listFiles.foreach { file =>
-        val testCase = yaml.load(Source.fromFile(file).getLines.mkString("\n")).asInstanceOf[TestCase]
+  val path = getClass.getResource("/testcases")
+  new File(path.getPath).listFiles.foreach { file =>
+    val testCase = yaml
+      .load(Source.fromFile(file).getLines.mkString("\n"))
+      .asInstanceOf[TestCase]
 
-        testCase.description in {
-          testCase.mocks.forEach(_.setupStubs)
-          val response = Await.result(testCase.executor.execute(app.injector.instanceOf[WSClient], port), 1.second)
-          testCase.validator.validate(response)
-        }
-      }
+    testCase.description in {
+      testCase.mocks.forEach(_.setupStubs)
+      val response = Await.result(
+        testCase.executor.execute(app.injector.instanceOf[WSClient], port),
+        1.second)
+      testCase.validator.validate(response)
+    }
+  }
 }
