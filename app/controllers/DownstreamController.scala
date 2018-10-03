@@ -3,10 +3,12 @@ package controllers
 import javax.inject._
 import play.api.libs.ws.WSClient
 import play.api.mvc._
-import scala.concurrent.ExecutionContext.Implicits.global
 
-class DownstreamController @Inject()(wsClient: WSClient,
-                                     cc: ControllerComponents)
+import scala.concurrent.ExecutionContext
+
+class DownstreamController @Inject()(
+    wsClient: WSClient,
+    cc: ControllerComponents)(implicit ec: ExecutionContext)
     extends AbstractController(cc) {
 
   def downstream(): Action[AnyContent] = Action.async {
