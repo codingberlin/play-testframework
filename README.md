@@ -18,4 +18,5 @@ sbt test
 
 ## Out of Scope
 - Dataloaders (can be achieved in the same way as Validators, Mocks and Executors)
+- run tests against staging
 
