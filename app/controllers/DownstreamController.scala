@@ -5,6 +5,7 @@ import play.api.libs.ws.WSClient
 import play.api.mvc._
 
 import scala.concurrent.ExecutionContext
+import scala.util.control.NonFatal
 
 class DownstreamController @Inject()(
     wsClient: WSClient,
@@ -19,6 +20,9 @@ class DownstreamController @Inject()(
         .map(_.body)
         .map(_.toUpperCase)
         .map(Ok(_))
-
+        .recover {
+          case NonFatal(e) =>
+            ServiceUnavailable
+        }
   }
 }

@@ -12,6 +12,7 @@ import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
 import play.api.libs.ws.WSClient
 import play.api.test._
+import scala.collection.JavaConverters._
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -27,28 +28,37 @@ class FunctionalTestsSpec
   private val wireMockServer = new WireMockServer(
     wireMockConfig().port(wiremockPort))
 
-  override def beforeEach {
+  override def beforeEach: Unit = {
     wireMockServer.start()
     WireMock.configureFor("localhost", wiremockPort)
   }
 
-  override def afterEach {
+  override def afterEach: Unit = {
     wireMockServer.stop()
   }
 
-  val yaml = new Yaml(new Constructor(classOf[TestCase]))
-  val path = getClass.getResource("/testcases")
-  new File(path.getPath).listFiles.foreach { file =>
-    val testCase = yaml
-      .load(Source.fromFile(file).getLines.mkString("\n"))
-      .asInstanceOf[TestCase]
+  def loadAllTestCasesFromResourceFolder(
+      folderName: String): Iterable[TestCase] = {
+    val yaml = new Yaml(new Constructor(classOf[TestCase]))
+    val path = getClass.getResource(folderName)
+    val allFilesContent = new File(path.getPath).listFiles
+      .map(Source.fromFile)
+      .map(_.getLines.mkString("\n"))
+      .mkString("\n---\n")
 
-    testCase.description in {
-      testCase.mocks.forEach(_.setupStubs)
-      val response = Await.result(
-        testCase.executor.execute(app.injector.instanceOf[WSClient], port),
-        1.second)
-      testCase.validator.validate(response)
-    }
+    yaml
+      .loadAll(allFilesContent)
+      .asScala
+      .map(_.asInstanceOf[TestCase])
   }
+
+  loadAllTestCasesFromResourceFolder("/testcases")
+    .foreach(testCase =>
+      testCase.description in {
+        testCase.mocks.forEach(_.setupStubs())
+        val response = Await.result(
+          testCase.executor.execute(app.injector.instanceOf[WSClient], port),
+          1.second)
+        testCase.validator.validate(response)
+    })
 }

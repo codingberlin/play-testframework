@@ -1,5 +1,5 @@
 package framework
 
 trait Mock {
-  def setupStubs()
+  def setupStubs(): Unit
 }

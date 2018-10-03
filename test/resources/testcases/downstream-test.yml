@@ -6,3 +6,12 @@ executor: !!executors.DownstreamRestCallExecutor {}
 validator: !!validators.DownstreamRestCallResponseValidator
   expectedStatusCode: 200
   expectedBody: "BAR"
+
+---
+description: "Downstream should response with 503 if downstream is unavailable"
+mocks:
+- !!mocks.DownstreamMock
+  simulateNetworkFailure: true
+executor: !!executors.DownstreamRestCallExecutor {}
+validator: !!validators.DownstreamRestCallResponseValidator
+  expectedStatusCode: 503

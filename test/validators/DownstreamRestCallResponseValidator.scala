@@ -10,6 +10,8 @@ class DownstreamRestCallResponseValidator extends RestCallResponseValidator {
   @BeanProperty var expectedBody: String = _
 
   override def validateSpecific(response: WSResponse): Unit = {
-    response.body mustEqual expectedBody
+    Option(expectedBody).foreach { body =>
+      response.body mustEqual body
+    }
   }
 }
