@@ -6,6 +6,7 @@ import play.api.libs.ws.WSResponse
 trait RestCallResponseValidator extends MustMatchers {
 
   def expectedStatusCode: Int
+
   def validateSpecific(response: WSResponse): Unit
 
   def validate(response: WSResponse): Unit = {

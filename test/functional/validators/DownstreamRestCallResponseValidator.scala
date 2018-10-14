@@ -4,6 +4,7 @@ import functional.framework.RestCallResponseValidator
 import play.api.libs.ws.WSResponse
 
 import scala.beans.BeanProperty
+
 class DownstreamRestCallResponseValidator extends RestCallResponseValidator {
 
   @BeanProperty var expectedStatusCode: Int = _
