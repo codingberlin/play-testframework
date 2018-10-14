@@ -1,4 +1,4 @@
-package framework
+package functional.framework
 
 import org.scalatest.MustMatchers
 import play.api.libs.ws.WSResponse

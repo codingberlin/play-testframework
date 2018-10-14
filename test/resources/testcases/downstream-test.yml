@@ -1,17 +1,19 @@
 description: "Downstream should upper case the result from the downstream service"
 mocks:
-  - !!mocks.DownstreamMock
+  - !!functional.mocks.DownstreamMock
     responseBody: "bar"
-executor: !!executors.DownstreamRestCallExecutor {}
-validator: !!validators.DownstreamRestCallResponseValidator
+    correlationId: "123"
+executor: !!functional.executors.DownstreamRestCallExecutor
+  correlationId: "123"
+validator: !!functional.validators.DownstreamRestCallResponseValidator
   expectedStatusCode: 200
   expectedBody: "BAR"
 
 ---
 description: "Downstream should response with 503 if downstream is unavailable"
 mocks:
-- !!mocks.DownstreamMock
+- !!functional.mocks.DownstreamMock
   simulateNetworkFailure: true
-executor: !!executors.DownstreamRestCallExecutor {}
-validator: !!validators.DownstreamRestCallResponseValidator
+executor: !!functional.executors.DownstreamRestCallExecutor {}
+validator: !!functional.validators.DownstreamRestCallResponseValidator
   expectedStatusCode: 503

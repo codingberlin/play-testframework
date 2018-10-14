@@ -1,6 +1,6 @@
-package validators
+package functional.validators
 
-import framework.RestCallResponseValidator
+import functional.framework.RestCallResponseValidator
 import play.api.libs.ws.WSResponse
 
 import scala.beans.BeanProperty

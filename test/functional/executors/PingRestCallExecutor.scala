@@ -1,6 +1,6 @@
-package executors
+package functional.executors
 
-import framework.RestCallExecutor
+import functional.framework.RestCallExecutor
 import play.api.libs.ws.{WSClient, WSResponse}
 
 import scala.concurrent.Future

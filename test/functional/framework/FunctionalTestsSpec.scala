@@ -1,11 +1,7 @@
-package framework
+package functional.framework
 
 import java.io.File
 
-import com.github.tomakehurst.wiremock.WireMockServer
-import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration._
-import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.play._
 import org.scalatestplus.play.guice._
 import org.yaml.snakeyaml.Yaml
@@ -18,27 +14,9 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.io.Source
 
-class FunctionalTestsSpec
-    extends PlaySpec
-    with GuiceOneServerPerSuite
-    with Injecting
-    with BeforeAndAfterEach {
+class FunctionalTestsSpec extends PlaySpec with GuiceOneServerPerSuite with Injecting with WireMockSupport {
 
-  private val wiremockPort = 9000
-  private val wireMockServer = new WireMockServer(
-    wireMockConfig().port(wiremockPort))
-
-  override def beforeEach: Unit = {
-    wireMockServer.start()
-    WireMock.configureFor("localhost", wiremockPort)
-  }
-
-  override def afterEach: Unit = {
-    wireMockServer.stop()
-  }
-
-  def loadAllTestCasesFromResourceFolder(
-      folderName: String): Iterable[TestCase] = {
+  def loadAllTestCasesFromResourceFolder(folderName: String): Iterable[TestCase] = {
     val yaml = new Yaml(new Constructor(classOf[TestCase]))
     val path = getClass.getResource(folderName)
     val allFilesContent = new File(path.getPath).listFiles
@@ -56,9 +34,8 @@ class FunctionalTestsSpec
     .foreach(testCase =>
       testCase.description in {
         testCase.mocks.forEach(_.setupStubs())
-        val response = Await.result(
-          testCase.executor.execute(app.injector.instanceOf[WSClient], port),
-          1.second)
+        val response = Await.result(testCase.executor.execute(app.injector.instanceOf[WSClient], port), 1.second)
+        testCase.mocks.forEach(_.verifyInvocations())
         testCase.validator.validate(response)
     })
 }
