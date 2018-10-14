@@ -5,19 +5,18 @@ import javax.inject.Inject
 import play.api.libs.ws.WSClient
 
 import scala.concurrent.{ExecutionContext, Future}
-import DownstreamClient._
+import play.api.Configuration
 
-class DownstreamClient @Inject()(wsClient: WSClient) {
+class DownstreamClient @Inject()(config: Configuration, wsClient: WSClient) {
+
+  val baseUrl = config.get[String]("downstreamBaseUrl")
+  val endpointUrl = s"$baseUrl/downstream"
 
   def callDownstream(implicit correlationId: CorrelationId, executionContext: ExecutionContext): Future[String] = {
     wsClient
-      .url(DOWNSTREAM_URL)
+      .url(endpointUrl)
       .addHttpHeaders(correlationId.asHeader)
       .get()
       .map(_.body)
   }
-}
-
-object DownstreamClient {
-  val DOWNSTREAM_URL = "http://localhost:9000/downstream"
 }

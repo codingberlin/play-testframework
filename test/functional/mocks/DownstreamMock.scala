@@ -1,6 +1,6 @@
 package functional.mocks
 
-import com.github.tomakehurst.wiremock.client.{MappingBuilder, RequestPatternBuilder}
+import com.github.tomakehurst.wiremock.client.MappingBuilder
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.http.Fault
 import controllers.CorrelationId

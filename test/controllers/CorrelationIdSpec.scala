@@ -2,11 +2,10 @@ package controllers
 
 import java.util.UUID
 
-import org.scalatestplus.play._
-import org.scalatest.mockito.MockitoSugar
-import play.api.mvc.{Headers, RequestHeader}
 import org.mockito.Mockito._
-import org.mockito.Matchers.{eq => eqTo}
+import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.play._
+import play.api.mvc.{Headers, RequestHeader}
 
 class CorrelationIdSpec extends PlaySpec with MockitoSugar {
 

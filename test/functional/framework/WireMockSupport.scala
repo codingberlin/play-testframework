@@ -20,4 +20,6 @@ trait WireMockSupport extends BeforeAndAfterEach {
     wireMockServer.stop()
   }
 
+  val wiremockUrl: String = s"http://localhost:$wiremockPort"
+
 }

@@ -1,12 +1,14 @@
 package service
 
+import com.github.tomakehurst.wiremock.client.WireMock._
+import com.typesafe.config.ConfigFactory
+import controllers.CorrelationId
 import functional.framework.WireMockSupport
+import org.apache.http.HttpStatus
 import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play._
+import play.api.Configuration
 import play.api.test.WsTestClient
-import com.github.tomakehurst.wiremock.client.WireMock._
-import controllers.CorrelationId
-import org.apache.http.HttpStatus
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -28,7 +30,8 @@ class DownsstreamClientSpec extends PlaySpec with MockitoSugar with WireMockSupp
                 .withStatus(HttpStatus.SC_OK)
                 .withBody(SOME_BODY)
             ))
-        val downstreamClient = new DownstreamClient(wsClient)
+        val config = new Configuration(ConfigFactory.parseString(s"""downstreamBaseUrl : "$wiremockUrl""""))
+        val downstreamClient = new DownstreamClient(config, wsClient)
 
         Await.result(downstreamClient.callDownstream, 5.seconds) mustEqual SOME_BODY
       }

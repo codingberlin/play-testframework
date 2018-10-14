@@ -1,14 +1,14 @@
 package service
 
 import controllers.CorrelationId
+import org.mockito.Matchers.{eq => eqTo, _}
+import org.mockito.Mockito._
+import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
-import org.mockito.Matchers.{eq => eqTo, _}
-import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
 
 class DownsstreamUppercaserServiceSpec extends PlaySpec with MockitoSugar {
   val FAILED_FUTURE = Future.failed(new RuntimeException("expected exception"))
